@@ -9,6 +9,9 @@ import sys
 def inicio():
   return render_template('raiz.html')
 
+@app.route("/prelogin",methods=['GET'])
+def prelogin():
+  return render_template('formulariologin.html')
 
 @app.route("/login",methods=['POST'])
 def login():
@@ -17,6 +20,9 @@ def login():
         juego_json = request.json
         username = juego_json['username']
         password = juego_json['password']
+    elif content_type == 'application/x-www-form-urlencoded':
+        username = request.form['username']
+        password = request.form['password']
         try:
             conexion = obtener_conexion()
             print(conexion)

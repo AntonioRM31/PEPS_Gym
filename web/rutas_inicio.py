@@ -20,6 +20,7 @@ def login():
         juego_json = request.json
         username = juego_json['username']
         password = juego_json['password']
+    # Para que acepte formularios
     elif content_type == 'application/x-www-form-urlencoded':
         username = request.form['username']
         password = request.form['password']
@@ -47,6 +48,10 @@ def login():
         code=401
     return json.dumps(ret), code
 
+@app.route("/preregistro",methods=['GET'])
+def preregistro():
+  return render_template('formularioregistro.html')
+
 @app.route("/registro",methods=['POST'])
 def registro():
     content_type = request.headers.get('Content-Type')
@@ -55,6 +60,10 @@ def registro():
         username = juego_json['username']
         password = juego_json['password']
         perfil = juego_json['profile']
+    elif content_type == 'application/x-www-form-urlencoded':
+        username = request.form['username']
+        password = request.form['password']
+        perfil = request.form['profile']
         try:
             conexion = obtener_conexion()
             with conexion.cursor() as cursor:

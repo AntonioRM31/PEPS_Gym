@@ -3,18 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Gym Login</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #1647cf;
+        }
+
+        .login-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            padding-right: 0px;
+            padding-left: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1647cf;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container button:hover {
+            background-color: #1647cf;
+        }
+
+        .login-container a {
+            color: #1647cf;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-container a:hover {
+            text-decoration: underline;
+        }
+        .login-container button {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
-    <form action="/login" method="POST" id="loginForm">
-        <label for="username">Usuario:</label>
-        <input type="text" id="username" name="username" required>
-        <br><br>
-        <label for="password">Clave:</label>
-        <input type="password" id="password" name="password" required>
-        <br><br>
-        <button type="submit">Iniciar sesión</button>
-    </form>
+    <div class="login-container">
+        <h1>Inicio de sesión</h1>
+        <form action="/login" method="POST">
+            <label for="username">Nombre de usuario</label>
+            <input type="text" id="username" name="username" placeholder="Introduce tu usuario" required>
+
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required>
+
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
 </body>
 </html>

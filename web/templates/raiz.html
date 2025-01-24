@@ -1,56 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página principal</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
         body {
             margin: 0;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
             font-family: Arial, sans-serif;
+            color: white;
+            background: rgba(28, 36, 65, 0.93);
+            background: url('../static/header.jpg') no-repeat center center fixed;
+            background-size: cover;
         }
 
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #333;
-            padding: 10px 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 10px;
+            background: transparent;
+            z-index: 1000;
         }
 
-        .navbar a {
+        .navbar-logo img {
+            height: 60px;
+            /* Tamaño del logo más grande */
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-logo img:active {
+            content: url('../static/logo-active.png');
+            transform: scale(0.95);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
             color: white;
             text-decoration: none;
-            padding: 10px 15px;
+            padding: 15px 25px;
+            /* Aumentamos el padding */
+            font-size: 1.2em;
+            /* Aumentamos el tamaño de la fuente */
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .btn.btn-blue {
+            background: #00a8ff;
+            color: white;
+            padding: 15px 30px;
+            /* Aumentamos el padding */
+            font-size: 1.3em;
+            /* Aumentamos el tamaño de la fuente */
+            text-decoration: none;
+            border-radius: 8px;
+            /* Suavizamos las esquinas */
+            font-weight: bold;
             transition: background-color 0.3s;
         }
 
-        .navbar a:hover {
-            background-color: #555;
+        .btn.btn-blue:hover {
+            background-color: #007bb5;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .nav-links a {
+                width: calc(100% - 20px);
+                margin: 0 auto;
+                text-align: center;
+                padding: 15px 25px;
+                /* Aumentamos el padding para dispositivos pequeños */
+                font-size: 1.2em;
+                /* Aumentamos la fuente */
+            }
+
+            .btn.btn-blue {
+                width: calc(100% - 20px);
+                margin: 0 auto;
+                text-align: center;
+                padding: 15px 30px;
+                font-size: 1.3em;
+            }
         }
 
         .content {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 80vh;
+            height: 100vh;
             text-align: center;
+            padding: 0 20px;
         }
 
         .content h1 {
             font-size: 2.5em;
-            color: #333;
+            color: white;
+            display: inline-block;
+        }
+
+        .content h3 {
+            font-size: 1.5em;
+            color: white;
+            margin: 0 0 20px;
+        }
+
+        .typed-cursor {
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1em;
+            color: white;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="navbar">
-        <a href="/prelogin">Login</a>
-        <a href="/preregistro">Registro</a>
+
+    <!-- Navbar transparente -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <!-- Imagen del logo que cambia al hacer clic -->
+            <a href="/main">
+                <img src="../static/logo.png" alt="Logo">
+            </a>
+        </div>
+        <div class="nav-links">
+            <!-- Botones de login y registro a la derecha -->
+            <a href="/preregistro">Register</a>
+            <a href="/prelogin" class="btn btn-blue">Login</a>
+        </div>
+    </nav>
+
+    <!-- Contenido principal con la animación de texto -->
+    <div class="content">
+        <h3>Take care of your body.</h3>
+        <h1 id="typed-text">
+            It's the only place you have to live.<span class="typed-cursor">|</span>
+        </h1>
     </div>
 
-    <div class="content">
-        <h1>Bienvenidos a nuestro gimnasio</h1>
-    </div>
+    <!-- Script para la animación de texto -->
+    <script>
+        const typedTextElement = document.getElementById("typed-text");
+        const cursorElement = document.querySelector(".typed-cursor");
+
+        const text = "It's the only place you have to live."; // Texto de la animación
+        const speed = 100; // Velocidad de escritura
+        let index = 0;
+
+        // Función para escribir el texto
+        function typeText() {
+            if (index < text.length) {
+                typedTextElement.firstChild.textContent = text.substring(0, index + 1); // Escribir el texto sin borrar el cursor
+                index++;
+                setTimeout(typeText, speed);
+            } else {
+                // Opcional: Detener el cursor después de que termine el texto
+                cursorElement.style.display = "inline-block";
+            }
+        }
+
+        // Inicia el efecto de escritura
+        typeText();
+    </script>
+
 </body>
+
 </html>

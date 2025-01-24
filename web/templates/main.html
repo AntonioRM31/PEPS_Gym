@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+</head>
+<body>
+    <h1>Bienvenido, {{ username }} (Perfil: {{ perfil }})</h1>
+    <h2>Productos disponibles</h2>
+    <ul>
+        {% for producto in productos %}
+            <li>
+                <h3>{{ producto.nombre }}</h3>
+                <p>{{ producto.descripcion }}</p>
+                <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/logout">Cerrar sesión</a>
+</body>
+</html>

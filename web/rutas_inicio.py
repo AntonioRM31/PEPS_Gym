@@ -13,40 +13,60 @@ def inicio():
 def prelogin():
   return render_template('formulariologin.html')
 
-@app.route("/login",methods=['POST'])
+@app.route("/login", methods=['POST'])
 def login():
     content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
+    if content_type == 'application/json':
         juego_json = request.json
         username = juego_json['username']
         password = juego_json['password']
-    # Para que acepte formularios
     elif content_type == 'application/x-www-form-urlencoded':
         username = request.form['username']
         password = request.form['password']
         try:
             conexion = obtener_conexion()
-            print(conexion)
             with conexion.cursor() as cursor:
-                 #cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s and clave= %s",(username,password))
-                 cursor.execute("SELECT perfil FROM usuarios WHERE usuario = '" + username +"' and clave= '" + password + "'")
-                 usuario = cursor.fetchone()
+                # Consulta segura usando parámetros
+                cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s AND clave = %s", (username, password))
+                usuario = cursor.fetchone()
             conexion.close()
+
             if usuario is None:
-                ret = {"status": "ERROR","mensaje":"Usuario/clave erroneo" }
+                # Usuario no encontrado
+                ret = {"status": "ERROR", "mensaje": "Usuario/clave incorrectos"}
+                code = 200
+                return json.dumps(ret), code
             else:
-                ret = {"status": "OK" }
-                #session["usuario"]=username
-                #session["perfil"]=usuario[0]
-            code=200
-        except:
-            print("Excepcion al validar al usuario")   
-            ret={"status":"ERROR"}
-            code=500
+                # Usuario válido, renderiza la página principal
+                session["usuario"] = username
+                session["perfil"] = usuario[0]
+                return render_template("main.html", username=username, perfil=usuario[0], productos=get_productos())
+        except Exception as e:
+            print(f"Excepción al validar al usuario: {e}")
+            ret = {"status": "ERROR"}
+            code = 500
+            return json.dumps(ret), code
     else:
-        ret={"status":"Bad request"}
-        code=401
-    return json.dumps(ret), code
+        ret = {"status": "Bad request"}
+        code = 401
+        return json.dumps(ret), code
+
+
+def get_productos():
+    # Simulación de productos: puedes reemplazarlo con datos de tu base de datos
+    return [
+        {"nombre": "Producto 1", "descripcion": "Descripción del producto 1", "precio": 10.99},
+        {"nombre": "Producto 2", "descripcion": "Descripción del producto 2", "precio": 20.50},
+        {"nombre": "Producto 3", "descripcion": "Descripción del producto 3", "precio": 15.75},
+    ]
+
+
+@app.route("/main", methods=['GET'])
+def main():
+    if "usuario" in session:
+        return render_template("main.html", username=session["usuario"], perfil=session["perfil"], productos=get_productos())
+    else:
+        return render_template("formulariologin.html", mensaje="Por favor, inicie sesión.")
 
 @app.route("/preregistro",methods=['GET'])
 def preregistro():

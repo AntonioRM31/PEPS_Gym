@@ -5,7 +5,7 @@ from bd import obtener_conexion
 import json
 import sys
 
-@app.route("/",methods=['GET'])
+@app.route("/main",methods=['GET'])
 def inicio():
   return render_template('raiz.html')
 

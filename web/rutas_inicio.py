@@ -53,13 +53,26 @@ def login():
 
 
 def get_productos():
-    # Simulación de productos: puedes reemplazarlo con datos de tu base de datos
     return [
-        {"nombre": "Producto 1", "descripcion": "Descripción del producto 1", "precio": 10.99},
-        {"nombre": "Producto 2", "descripcion": "Descripción del producto 2", "precio": 20.50},
-        {"nombre": "Producto 3", "descripcion": "Descripción del producto 3", "precio": 15.75},
+        {
+            "nombre": "Bicicleta de montaña",
+            "descripcion": "Bicicleta en excelente estado, perfecta para rutas de montaña.",
+            "precio": 120.99,
+            "imagen": "https://via.placeholder.com/300x200?text=Bicicleta"
+        },
+        {
+            "nombre": "Teléfono móvil",
+            "descripcion": "Teléfono con pantalla OLED, 128GB de almacenamiento.",
+            "precio": 250.50,
+            "imagen": "https://cdn.tmobile.com/content/dam/t-mobile/en-p/cell-phones/apple/Apple-iPhone-16-Pro/Desert-Titanium/Apple-iPhone-16-Pro-Desert-Titanium-thumbnail.png"
+        },
+        {
+            "nombre": "Silla ergonómica",
+            "descripcion": "Silla ergonómica para oficina, ideal para largas jornadas.",
+            "precio": 85.75,
+            "imagen": "https://via.placeholder.com/300x200?text=Silla"
+        }
     ]
-
 
 @app.route("/main", methods=['GET'])
 def main():

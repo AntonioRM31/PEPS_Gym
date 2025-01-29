@@ -10,7 +10,7 @@ CREATE TABLE juegos(
 CREATE TABLE usuarios(
 	usuario VARCHAR(100) NOT NULL PRIMARY KEY,
     clave VARCHAR(255) NOT NULL,
-    perfil VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     fechaUltimoAcceso DATE
 );
-INSERT INTO `usuarios` (`usuario`, `clave`, `perfil`, `fechaUltimoAcceso`) VALUES ('root', '1234', 'admin', '2022-03-01');
+INSERT INTO `usuarios` (`usuario`, `clave`, `email`, `fechaUltimoAcceso`) VALUES ('root', '1234', 'root@root.com', '2022-03-01');

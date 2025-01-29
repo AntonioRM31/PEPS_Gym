@@ -5,15 +5,16 @@ from bd import obtener_conexion
 import json
 import sys
 
-@app.route("/main",methods=['GET'])
+
+@app.route("/",methods=['GET'])
 def inicio():
   return render_template('raiz.html')
 
-@app.route("/prelogin",methods=['GET'])
+@app.route("/login",methods=['GET'])
 def prelogin():
   return render_template('formulariologin.html')
 
-@app.route("/login", methods=['POST'])
+@app.route("/main", methods=['POST'])
 def login():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
@@ -40,7 +41,7 @@ def login():
                 # Usuario válido, renderiza la página principal
                 session["usuario"] = username
                 session["perfil"] = usuario[0]
-                return render_template("main.html", username=username, perfil=usuario[0], productos=get_productos())
+                return render_template("main.html", username=username, perfil=usuario[0], actividades=get_actividades())
         except Exception as e:
             print(f"Excepción al validar al usuario: {e}")
             ret = {"status": "ERROR"}
@@ -52,32 +53,29 @@ def login():
         return json.dumps(ret), code
 
 
-def get_productos():
+def get_actividades():
     return [
         {
-            "nombre": "Bicicleta de montaña",
-            "descripcion": "Bicicleta en excelente estado, perfecta para rutas de montaña.",
-            "precio": 120.99,
-            "imagen": "https://via.placeholder.com/300x200?text=Bicicleta"
+            "nombre": "Levantamiento de peso muerto",
+            "descripcion": "Ejercicio esencial para fuerza y estabilidad.",
+            "imagen": "static/images/peso_muerto.jpg"
         },
         {
-            "nombre": "Teléfono móvil",
-            "descripcion": "Teléfono con pantalla OLED, 128GB de almacenamiento.",
-            "precio": 250.50,
-            "imagen": "https://cdn.tmobile.com/content/dam/t-mobile/en-p/cell-phones/apple/Apple-iPhone-16-Pro/Desert-Titanium/Apple-iPhone-16-Pro-Desert-Titanium-thumbnail.png"
+            "nombre": "Remo para espalda",
+            "descripcion": "Fortalece la espalda y mejora la resistencia.",
+            "imagen": "static/images/remo_espalda.jpeg"
         },
         {
-            "nombre": "Silla ergonómica",
-            "descripcion": "Silla ergonómica para oficina, ideal para largas jornadas.",
-            "precio": 85.75,
-            "imagen": "https://via.placeholder.com/300x200?text=Silla"
+            "nombre": "Clase de CrossFit",
+            "descripcion": "Rutinas intensas para mejorar el acondicionamiento físico.",
+            "imagen": "static/images/crossfit.jpeg"
         }
     ]
 
-@app.route("/main", methods=['GET'])
+@app.route("/login", methods=['GET'])
 def main():
     if "usuario" in session:
-        return render_template("main.html", username=session["usuario"], perfil=session["perfil"], productos=get_productos())
+        return render_template("main.html", username=session["usuario"], perfil=session["perfil"], actividades=get_actividades())
     else:
         return render_template("formulariologin.html", mensaje="Por favor, inicie sesión.")
 
@@ -99,6 +97,7 @@ def registro():
         perfil = request.form['profile']
         try:
             conexion = obtener_conexion()
+            
             with conexion.cursor() as cursor:
                  #cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s and clave= %s",(username,password))
                  cursor.execute("SELECT perfil FROM usuarios WHERE usuario = '" + username +"' and clave= '" + password + "'")
@@ -126,9 +125,16 @@ def registro():
         code=401
     return json.dumps(ret), code
 
-from flask import redirect, url_for
+from flask import redirect, url_for, make_response
 @app.route("/logout", methods=['GET'])
 def logout():
-    session.clear()
-    return redirect(url_for("prelogin"))  # Redirige al formulario de login
+    session.clear()  # Elimina la sesión completamente
+    
+    # Crear una respuesta con cabeceras de control de caché
+    response = make_response(redirect(url_for("inicio")))  # Redirige a la ruta "/"
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "-1"
+    
+    return response
 

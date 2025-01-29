@@ -126,8 +126,9 @@ def registro():
         code=401
     return json.dumps(ret), code
 
-
-@app.route("/logout",methods=['GET'])
+from flask import redirect, url_for
+@app.route("/logout", methods=['GET'])
 def logout():
     session.clear()
-    return json.dumps({"status":"OK"}),200
+    return redirect(url_for("prelogin"))  # Redirige al formulario de login
+

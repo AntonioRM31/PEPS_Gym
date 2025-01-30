@@ -83,10 +83,11 @@ def main():
 def preregistro():
   return render_template('formularioregistro.html')
 
-@app.route("/registro",methods=['POST'])
+
+@app.route("/registro", methods=['POST'])
 def registro():
     content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
+    if content_type == 'application/json':
         juego_json = request.json
         username = juego_json['username']
         password = juego_json['password']
@@ -99,39 +100,38 @@ def registro():
             conexion = obtener_conexion()
             
             with conexion.cursor() as cursor:
-                 #cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s and clave= %s",(username,password))
-                 cursor.execute("SELECT perfil FROM usuarios WHERE usuario = '" + username +"' and clave= '" + password + "'")
+                 cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s and clave = %s", (username, password))
                  usuario = cursor.fetchone()
+                 
                  if usuario is None:
-                     print("INSERT INTO usuarios(usuario,clave,perfil) VALUES('"+ username +"','"+  password+"','"+ perfil+"')") 
-                     cursor.execute("INSERT INTO usuarios(usuario,clave,perfil) VALUES('"+ username +"','"+  password+"','"+ perfil+"')")
+                     cursor.execute("INSERT INTO usuarios(usuario, clave, perfil) VALUES(%s, %s, %s)", (username, password, perfil))
                      if cursor.rowcount == 1:
                          conexion.commit()
-                         ret={"status": "OK" }
-                         code=200
+                         # Redirigir a la página de inicio de sesión después del registro exitoso
+                         return redirect(url_for('prelogin'))  # Aquí redirige a /login
                      else:
-                         ret={"status": "ERROR" }
-                         code=500
+                         ret = {"status": "ERROR"}
+                         code = 500
                  else:
-                   ret = {"status": "ERROR","mensaje":"Usuario/clave erroneo" }
-                   code=200
+                     ret = {"status": "ERROR", "mensaje": "Usuario ya existe"}
+                     code = 200
             conexion.close()
-        except:
-            print("Excepcion al registrar al usuario")   
-            ret={"status":"ERROR"}
-            code=500
+        except Exception as e:
+            print(f"Excepción al registrar al usuario: {e}")   
+            ret = {"status": "ERROR"}
+            code = 500
     else:
-        ret={"status":"Bad request"}
-        code=401
+        ret = {"status": "Bad request"}
+        code = 401
+    
     return json.dumps(ret), code
 
 from flask import redirect, url_for, make_response
 @app.route("/logout", methods=['GET'])
 def logout():
-    session.clear()  # Elimina la sesión completamente
+    session.clear()
     
-    # Crear una respuesta con cabeceras de control de caché
-    response = make_response(redirect(url_for("inicio")))  # Redirige a la ruta "/"
+    response = make_response(redirect(url_for("inicio")))  
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "-1"

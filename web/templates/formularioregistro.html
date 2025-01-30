@@ -1,111 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .login-container {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .login-container h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #1647cf;
-        }
-
-        .login-container label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            text-align: left;
-        }
-
-        .login-container input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            padding-right: 0px;
-            padding-left: 5px;
-            border: none;
-            border-radius: 5px;
-            background-color: #2a2a2a;
-            color: #ffffff;
-        }
-
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #1647cf;
-            color: #ffffff;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .login-container button:hover {
-            background-color: #1647cf;
-        }
-
-        .login-container a {
-            color: #1647cf;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .login-container a:hover {
-            text-decoration: underline;
-        }
-
-        .login-container button {
-            margin-bottom: 20px;
-        }
-
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .back-button img {
-            width: 35px;
-            height: 35px;
-            filter: invert(1);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='registro.css') }}">
 </head>
 <body>
 
     <a href="/" class="back-button">
-        <img src="https://cdn-icons-png.flaticon.com/512/93/93634.png" alt="Volver">
+        <img src="{{ url_for('static', filename='images/back.png') }}" alt="Volver">
     </a>
-    </style>
-</head>
-<body>
-    <div class="login-container">
+
+    <div class="register-container">
         <h1>Registro</h1>
         <form action="/registro" method="POST">
             <label for="username">Nombre de usuario o correo electrónico</label>
@@ -116,13 +23,14 @@
 
             <label for="perfil">Perfil:</label>
             <select id="perfil" name="profile" required>
-            <option value="admin">Admin</option>
-            <option value="entrenador">Entrenador</option>
-            <option value="cliente">Cliente</option>
-            </select> <br> <br>
+                <option value="admin">Admin</option>
+                <option value="entrenador">Entrenador</option>
+                <option value="cliente">Cliente</option>
+            </select> 
 
             <button type="submit">Registrarse</button>
         </form>
     </div>
+
 </body>
 </html>

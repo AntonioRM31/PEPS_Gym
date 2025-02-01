@@ -4,6 +4,7 @@ from flask import request,session, render_template
 from bd import obtener_conexion
 import json
 import sys
+import bcrypt
 
 
 @app.route("/",methods=['GET'])
@@ -28,7 +29,7 @@ def login():
             conexion = obtener_conexion()
             with conexion.cursor() as cursor:
                 # Consulta segura usando parámetros
-                cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s AND clave = %s", (username, password))
+                cursor.execute("SELECT perfil, clave FROM usuarios WHERE usuario = %s", (username,))
                 usuario = cursor.fetchone()
             conexion.close()
 
@@ -38,10 +39,18 @@ def login():
                 code = 200
                 return json.dumps(ret), code
             else:
-                # Usuario válido, renderiza la página principal
-                session["usuario"] = username
-                session["perfil"] = usuario[0]
-                return render_template("main.html", username=username, perfil=usuario[0], actividades=get_actividades())
+                # Verificar si la contraseña coincide con el hash
+                hashed_password = usuario[1]  # La contraseña está en la segunda columna
+                if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
+                    # Si la contraseña es correcta, renderiza la página principal
+                    session["usuario"] = username
+                    session["perfil"] = usuario[0]  # El perfil está en la primera columna
+                    return render_template("main.html", username=username, perfil=usuario[0], actividades=get_actividades())
+                else:
+                    # Si la contraseña no coincide
+                    ret = {"status": "ERROR", "mensaje": "Usuario/clave incorrectos"}
+                    code = 200
+                    return json.dumps(ret), code
         except Exception as e:
             print(f"Excepción al validar al usuario: {e}")
             ret = {"status": "ERROR"}
@@ -97,24 +106,29 @@ def registro():
         password = request.form['password']
         perfil = request.form['profile']
         try:
+            # Hashear la contraseña antes de almacenarla
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
             conexion = obtener_conexion()
             
             with conexion.cursor() as cursor:
-                 cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s and clave = %s", (username, password))
-                 usuario = cursor.fetchone()
+                cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s", (username,))
+                usuario = cursor.fetchone()
                  
-                 if usuario is None:
-                     cursor.execute("INSERT INTO usuarios(usuario, clave, perfil) VALUES(%s, %s, %s)", (username, password, perfil))
-                     if cursor.rowcount == 1:
-                         conexion.commit()
-                         # Redirigir a la página de inicio de sesión después del registro exitoso
-                         return redirect(url_for('prelogin'))  # Aquí redirige a /login
-                     else:
-                         ret = {"status": "ERROR"}
-                         code = 500
-                 else:
-                     ret = {"status": "ERROR", "mensaje": "Usuario ya existe"}
-                     code = 200
+                if usuario is None:
+                    cursor.execute("INSERT INTO usuarios(usuario, clave, perfil) VALUES(%s, %s, %s)", (username, hashed_password, perfil))
+
+                    if cursor.rowcount == 1:  
+                        conexion.commit()
+                        # Redirigir a la página de inicio de sesión después del registro exitoso
+                        return redirect(url_for('prelogin'))  # Aquí redirige a /login
+                    else:
+                        ret = {"status": "ERROR"}
+                        code = 500
+                else:
+                    ret = {"status": "ERROR", "mensaje": "Usuario ya existe"}
+                    code = 200
+
             conexion.close()
         except Exception as e:
             print(f"Excepción al registrar al usuario: {e}")   

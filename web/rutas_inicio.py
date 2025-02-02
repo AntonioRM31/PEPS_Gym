@@ -29,7 +29,7 @@ def login():
             conexion = obtener_conexion()
             with conexion.cursor() as cursor:
                 # Consulta segura usando parámetros
-                cursor.execute("SELECT clave FROM usuarios WHERE usuario = %s", (username,))
+                cursor.execute("SELECT usuario, clave FROM usuarios WHERE usuario = %s", (username,))
                 usuario = cursor.fetchone()
             conexion.close()
 
@@ -44,7 +44,7 @@ def login():
                 if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
                     # Si la contraseña es correcta, renderiza la página principal
                     session["usuario"] = username
-                    return render_template("main.html", username=username, actividades=get_actividades())
+                    return render_template("main.html", username=username, email=usuario[0], actividades=get_actividades())
                 else:
                     # Si la contraseña no coincide
                     ret = {"status": "ERROR", "mensaje": "Usuario/clave incorrectos"}

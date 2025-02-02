@@ -51,8 +51,8 @@ def login():
                     code = 200
                     return json.dumps(ret), code
         except Exception as e:
-            print(f"Excepción al validar al usuario: {e}")
-            ret = {"status": "ERROR"}
+            mensajeerror = (f"Excepción al validar al usuario: {e}")
+            ret = {"status": "ERROR", "mensaje": f"{mensajeerror}"}
             code = 500
             return json.dumps(ret), code
     else:
@@ -120,7 +120,7 @@ def registro():
                     if cursor.rowcount == 1:  
                         conexion.commit()
                         # Redirigir a la página de inicio de sesión después del registro exitoso
-                        return redirect(url_for('prelogin'))  # Aquí redirige a /login
+                        return redirect(url_for('prelogin')) 
                     else:
                         ret = {"status": "ERROR"}
                         code = 500
@@ -130,8 +130,8 @@ def registro():
 
             conexion.close()
         except Exception as e:
-            print(f"Excepción al registrar al usuario: {e}")   
-            ret = {"status": "ERROR"}
+            mensajeerror = (f"Excepción al registrar al usuario: {e}")   
+            ret = {"status": "ERROR", "mensaje": f"{mensajeerror}"}
             code = 500
     else:
         ret = {"status": "Bad request"}

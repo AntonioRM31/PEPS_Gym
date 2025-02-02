@@ -1,0 +1,150 @@
+/* Global Styles */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: white;
+    background: rgba(28, 36, 65, 0.93);
+    background: url('../static/header.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 10px;
+    background: transparent;
+    z-index: 1000;
+}
+
+.navbar-logo img {
+    height: 60px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.navbar-logo img:active {
+    content: url('../static/logo-active.png');
+    transform: scale(0.95);
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 15px 25px;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Button Styles */
+.btn.btn-blue {
+    background: #00a8ff;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.3em;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn.btn-blue:hover {
+    background-color: #007bb5;
+}
+
+/* Content Styles */
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.content h1 {
+    font-size: 2.5em;
+    color: white;
+    display: inline-block;
+}
+
+.content h3 {
+    font-size: 1.5em;
+    color: white;
+    margin: 0 0 20px;
+}
+
+.typed-cursor {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1em;
+    color: white;
+    animation: blink 0.7s infinite;
+}
+
+/* Keyframes */
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .nav-links a {
+        width: calc(100% - 20px);
+        margin: 0 auto;
+        text-align: center;
+        padding: 15px 25px;
+        font-size: 1.2em;
+    }
+
+    .btn.btn-blue {
+        width: calc(100% - 20px);
+        margin: 0 auto;
+        text-align: center;
+        padding: 15px 30px;
+        font-size: 1.3em;
+    }
+}

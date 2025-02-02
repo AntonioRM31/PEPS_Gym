@@ -12,7 +12,6 @@ services:
     volumes:
       - ./mariadb_data:/var/lib/mysql
       - ./Juegos.sql://docker-entrypoint-initdb.d/Juegos.sql
-
     user: mysql
   phpmyadmin:
     image: phpmyadmin
@@ -35,7 +34,14 @@ services:
       DB_PORT: 3306
       PORT: 8080
       HOST: 0.0.0.0
-    ports:
-      - 9094:8080
+      PYTHONBUFFERED: 1
     depends_on:
         - mariadb
+  apache:
+    build: ./web/apache
+    volumes: 
+      - ./web/static:/var/www/html
+    ports:
+      - 7777:80
+    depends_on:
+      - python

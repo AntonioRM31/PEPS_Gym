@@ -13,7 +13,7 @@ body {
     font-family: Arial, sans-serif;
     color: white;
     background: rgba(28, 36, 65, 0.93);
-    background: url('../static/header.jpg') no-repeat center center fixed;
+    background: url('../static/images/header.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -38,7 +38,7 @@ body {
 }
 
 .navbar-logo img:active {
-    content: url('../static/logo-active.png');
+    content: url('../static/images/logo-active.png');
     transform: scale(0.95);
 }
 

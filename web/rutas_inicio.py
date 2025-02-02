@@ -44,8 +44,7 @@ def login():
                 if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
                     # Si la contraseña es correcta, renderiza la página principal
                     session["usuario"] = username
-                    session["perfil"] = usuario[0]  # El perfil está en la primera columna
-                    return render_template("main.html", username=username, perfil=usuario[0], actividades=get_actividades())
+                    return render_template("main.html", username=username, actividades=get_actividades())
                 else:
                     # Si la contraseña no coincide
                     ret = {"status": "ERROR", "mensaje": "Usuario/clave incorrectos"}
@@ -84,7 +83,7 @@ def get_actividades():
 @app.route("/login", methods=['GET'])
 def main():
     if "usuario" in session:
-        return render_template("main.html", username=session["usuario"], perfil=session["perfil"], actividades=get_actividades())
+        return render_template("main.html", username=session["usuario"], actividades=get_actividades())
     else:
         return render_template("formulariologin.html", mensaje="Por favor, inicie sesión.")
 
@@ -100,11 +99,11 @@ def registro():
         juego_json = request.json
         username = juego_json['username']
         password = juego_json['password']
-        perfil = juego_json['profile']
+        email = juego_json['email']
     elif content_type == 'application/x-www-form-urlencoded':
         username = request.form['username']
         password = request.form['password']
-        perfil = request.form['profile']
+        email = request.form['email']
         try:
             # Hashear la contraseña antes de almacenarla
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
@@ -116,7 +115,7 @@ def registro():
                 usuario = cursor.fetchone()
                  
                 if usuario is None:
-                    cursor.execute("INSERT INTO usuarios(usuario, clave, perfil) VALUES(%s, %s, %s)", (username, hashed_password, perfil))
+                    cursor.execute("INSERT INTO usuarios(usuario, clave, email) VALUES(%s, %s, %s)", (username, hashed_password, email))
 
                     if cursor.rowcount == 1:  
                         conexion.commit()

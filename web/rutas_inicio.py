@@ -29,7 +29,7 @@ def login():
             conexion = obtener_conexion()
             with conexion.cursor() as cursor:
                 # Consulta segura usando parámetros
-                cursor.execute("SELECT perfil, clave FROM usuarios WHERE usuario = %s", (username,))
+                cursor.execute("SELECT clave FROM usuarios WHERE usuario = %s", (username,))
                 usuario = cursor.fetchone()
             conexion.close()
 
@@ -111,7 +111,7 @@ def registro():
             conexion = obtener_conexion()
             
             with conexion.cursor() as cursor:
-                cursor.execute("SELECT perfil FROM usuarios WHERE usuario = %s", (username,))
+                cursor.execute("SELECT usuario FROM usuarios WHERE usuario = %s", (username,))
                 usuario = cursor.fetchone()
                  
                 if usuario is None:

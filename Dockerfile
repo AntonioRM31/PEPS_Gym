@@ -4,9 +4,9 @@ WORKDIR /app
 
 COPY requirements.txt .  
 
-#RUN pip install -r requirements.txt  
+RUN pip install -r requirements.txt  
 
 ADD ./web .  
 
 EXPOSE 8080
-CMD ["python", "python/app.py", "runserver"]
+CMD ["python", "app.py", "runserver"]

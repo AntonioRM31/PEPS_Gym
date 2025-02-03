@@ -40,6 +40,7 @@ body {
     color: white;
 }
 
+/* Botón de home ya existente (esquina superior izquierda) */
 .home-button {
     position: absolute;
     top: 20px;
@@ -53,4 +54,26 @@ body {
     width: 35px;
     height: 35px;
     filter: invert(1);
+}
+
+/* Estilos para la imagen de perfil en la esquina superior derecha */
+.profile-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.profile-container img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+/* Ocultar el input file */
+#fileInput {
+    display: none;
 }

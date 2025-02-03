@@ -7,7 +7,7 @@ import sys
 import bcrypt
 
 
-@app.route("/main", methods=['POST'])
+@app.route("/", methods=['POST'])
 def login():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
@@ -24,9 +24,10 @@ def login():
                 cursor.execute("SELECT usuario, clave FROM usuarios WHERE usuario = %s", (username,))
                 usuario = cursor.fetchone()
             conexion.close()
-
+            print(usuario)
             if usuario is None:
                 # Usuario no encontrado
+                
                 ret = {"status": "ERROR", "mensaje": "Usuario/clave incorrectos"}
                 code = 200
                 return json.dumps(ret), code
@@ -72,13 +73,6 @@ def get_actividades():
         }
     ]
 
-@app.route("/login", methods=['GET'])
-def main():
-    if "usuario" in session:
-        return render_template("main.html", username=session["usuario"], actividades=get_actividades())
-    else:
-         return redirect("http://apache/formulariologin.html")
-
 
 @app.route("/registro", methods=['POST'])
 def registro():
@@ -108,7 +102,7 @@ def registro():
                     if cursor.rowcount == 1:  
                         conexion.commit()
                         # Redirigir a la página de inicio de sesión después del registro exitoso
-                        return redirect(url_for('login')) 
+                        return redirect("http://localhost:7777/templates/formulariologin.html")
                     else:
                         ret = {"status": "ERROR"}
                         code = 500

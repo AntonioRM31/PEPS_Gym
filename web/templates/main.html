@@ -6,18 +6,99 @@
     <title>Actividades</title>
     <!-- Incluye Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="mainActividades.css">
-    <link rel="icon" href="logo-active.png" type="image/png">  
+    <link rel="icon" href="http://localhost:7777/images/logo-active.png" type="image/png">  
 
 </head>
+<style>
+  body {
+    background-color: #09243f;
+}
+
+.card {
+    margin: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%; 
+    display: flex;
+    flex-direction: column;
+}
+
+.card img {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    height: 200px; 
+    width: 100%; 
+    object-fit: cover; 
+}
+
+.card-body {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.card-text {
+    color: #6c757d;
+}
+
+.welcome-text {
+    color: white;
+}
+
+/* Botón de home ya existente (esquina superior izquierda) */
+.home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.home-button img {
+    width: 35px;
+    height: 35px;
+    filter: invert(1);
+}
+
+/* Estilos para la imagen de perfil en la esquina superior derecha */
+.profile-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.profile-container img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+/* Ocultar el input file */
+#fileInput {
+    display: none;
+}
+
+</style>
 <body>
     <a href="/" class="home-button">
-        <img src="home.png" alt="Volver">
+        <img src="http://localhost:7777/images/home.png" alt="Volver">
     </a>
     
     <!-- Contenedor de la imagen de perfil en la esquina superior derecha -->
     <div class="profile-container">
-       <img id="profileImage" src="default.png" alt="Foto de perfil">
+       <img id="profileImage" src="http://localhost:7777/images/default.png" alt="Foto de perfil">
         <!-- Input file oculto para seleccionar la imagen -->
         <input type="file" id="fileInput" name="fichero" accept="image/*">
     </div>
@@ -40,7 +121,7 @@
             {% endfor %}
         </div>
         <div class="text-center mt-5">
-            <a href="/logout" class="btn btn-danger">Cerrar sesión</a>
+            <a href="/api/logout" class="btn btn-danger">Cerrar sesión</a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

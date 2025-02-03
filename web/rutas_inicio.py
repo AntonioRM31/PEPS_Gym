@@ -59,17 +59,17 @@ def get_actividades():
         {
             "nombre": "Levantamiento de peso muerto",
             "descripcion": "Ejercicio esencial para fuerza y estabilidad.",
-            "imagen": "static/images/peso_muerto.jpg"
+            "imagen": "http://localhost:7777/images/peso_muerto.jpg"
         },
         {
             "nombre": "Remo para espalda",
             "descripcion": "Fortalece la espalda y mejora la resistencia.",
-            "imagen": "static/images/remo_espalda.jpeg"
+            "imagen": "http://localhost:7777/images/remo_espalda.jpeg"
         },
         {
             "nombre": "Clase de CrossFit",
             "descripcion": "Rutinas intensas para mejorar el acondicionamiento físico.",
-            "imagen": "static/images/crossfit.jpeg"
+            "imagen": "http://localhost:7777/images/crossfit.jpeg"
         }
     ]
 
@@ -126,7 +126,7 @@ from flask import redirect, url_for, make_response
 def logout():
     session.clear()
     
-    response = make_response(redirect(url_for("inicio")))  
+    response = make_response(redirect("http://localhost:7777/"))  
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "-1"

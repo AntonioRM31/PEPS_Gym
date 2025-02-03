@@ -7,14 +7,6 @@ import sys
 import bcrypt
 
 
-@app.route("/",methods=['GET'])
-def inicio():
-  return render_template('raiz.html')
-
-@app.route("/login",methods=['GET'])
-def prelogin():
-  return render_template('formulariologin.html')
-
 @app.route("/main", methods=['POST'])
 def login():
     content_type = request.headers.get('Content-Type')
@@ -85,11 +77,7 @@ def main():
     if "usuario" in session:
         return render_template("main.html", username=session["usuario"], actividades=get_actividades())
     else:
-        return render_template("formulariologin.html", mensaje="Por favor, inicie sesión.")
-
-@app.route("/preregistro",methods=['GET'])
-def preregistro():
-  return render_template('formularioregistro.html')
+         return redirect("http://apache/formulariologin.html")
 
 
 @app.route("/registro", methods=['POST'])
@@ -120,7 +108,7 @@ def registro():
                     if cursor.rowcount == 1:  
                         conexion.commit()
                         # Redirigir a la página de inicio de sesión después del registro exitoso
-                        return redirect(url_for('prelogin')) 
+                        return redirect(url_for('login')) 
                     else:
                         ret = {"status": "ERROR"}
                         code = 500
@@ -151,3 +139,5 @@ def logout():
     
     return response
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True)

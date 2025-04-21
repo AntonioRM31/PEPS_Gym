@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="http://localhost:6104/images/logo-active.png" type="image/png">
+    <style>
+        body {
+            background-color: #09243f;
+        }
+
+        .card {
+            margin: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card img {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .card-text {
+            color: #6c757d;
+        }
+
+        .add-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 30px;
+            border: none;
+        }
+
+        .welcome-text {
+            color: white;
+        }
+
+        /* Botón de home ya existente (esquina superior izquierda) */
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .home-button img {
+            width: 35px;
+            height: 35px;
+            filter: invert(1);
+        }
+
+        /* Estilos para la imagen de perfil en la esquina superior derecha */
+        .profile-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .profile-container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+        }
+
+        /* Ocultar el input file */
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Actividades</a>
+            <button class="btn btn-danger" onclick="cerrarSesion()">Cerrar sesión</button>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="text-center welcome-text">¡Bienvenido! <span id="username"></span></h1>
+        <h2 class="text-center welcome-text mb-4">Actividades disponibles</h2>
+
+        <div id="actividades-container" class="row"></div>
+
+        <!-- Botón flotante para agregar -->
+        <button class="add-button" onclick="mostrarModal()">+</button>
+    </div>
+
+
+    <!-- Modal para editar/crear -->
+    <div class="modal fade" id="modalActividad">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">Nueva Actividad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formActividad" enctype="multipart/form-data">
+                        <input type="hidden" id="actividadId">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre:</label>
+                            <input type="text" id="nombreActividad" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción:</label>
+                            <textarea id="descripcionActividad" class="form-control" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Imagen:</label>
+                            <input type="file" id="imagenActividad" class="form-control" accept="image/*">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarActividad()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = '/';
+        let perfil = 'user';
+        let modal = new bootstrap.Modal(document.getElementById('modalActividad'));
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarPerfil();
+            cargarActividades();
+        });
+
+        function cargarPerfil() {
+            // Obtener datos de sesión (ajustar según tu implementación)
+            const usuario = sessionStorage.getItem('usuario');
+            perfil = sessionStorage.getItem('perfil') || 'user';
+            document.getElementById('username').textContent = usuario;
+        }
+
+
+        async function cargarActividades() {
+            try {
+                const response = await fetch(API_URL);
+                console.log('Respuesta del servidor:', response);  // ✅ Ver estado HTTP
+
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+
+                const actividades = await response.json();
+                console.log('Datos recibidos:', actividades);
+                alert("pilla las actividades")  // ✅ Ver datos en consola
+                renderizarActividades(actividades);
+            } catch (error) {
+                console.error('Error al cargar actividades:', error);
+                alert("no pilla las actividades");
+            }
+        }
+
+
+        async function guardarActividad() {
+            const formData = new FormData();
+            formData.append('nombre', document.getElementById('nombreActividad').value);
+            formData.append('descripcion', document.getElementById('descripcionActividad').value);
+
+            const imagenInput = document.getElementById('imagenActividad');
+            if (imagenInput.files[0]) {
+                formData.append('imagen', imagenInput.files[0]);
+            }
+
+            const id = document.getElementById('actividadId').value;
+            const metodo = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/${id}` : API_URL;
+
+            try {
+                const response = await fetch(url, {
+                    method: metodo,
+                    body: formData
+                });
+
+                if (response.ok) {
+                    modal.hide();
+                    cargarActividades();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+
+        function renderizarActividades(actividades) {
+            const container = document.getElementById('actividades-container');
+            container.innerHTML = '';
+
+            actividades.forEach(actividad => {
+                const card = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100" data-id="${actividad.id}">
+                            <img src="${actividad.imagen}" class="card-img-top" alt="${actividad.nombre}">
+                            <div class="card-body">
+                                <h5 class="card-title">${actividad.nombre}</h5>
+                                <p class="card-text">${actividad.descripcion}</p>
+                                ${perfil === 'admin' ? `
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-warning" onclick="editarActividad(${actividad.id})">Editar</button>
+                                    <button class="btn btn-danger" onclick="borrarActividad(${actividad.id})">Eliminar</button>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
+                container.insertAdjacentHTML('beforeend', card);
+            });
+        }
+
+        async function editarActividad(id) {
+            try {
+                const response = await fetch(`${API_URL}/${id}`);
+                const actividad = await response.json();
+
+                document.getElementById('actividadId').value = id;
+                document.getElementById('nombreActividad').value = actividad.nombre;
+                document.getElementById('descripcionActividad').value = actividad.descripcion;
+                document.getElementById('modalTitulo').textContent = 'Editar Actividad';
+                modal.show();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function mostrarModal() {
+            document.getElementById('formActividad').reset();
+            document.getElementById('modalTitulo').textContent = 'Nueva Actividad';
+            modal.show();
+        }
+
+
+        async function borrarActividad(id) {
+            if (!confirm('¿Estás seguro de eliminar esta actividad?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    cargarActividades();
+                } else {
+                    alert('Error al eliminar');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function cerrarSesion() {
+            try {
+                const response = await fetch('/api/logout', { method: 'POST' });
+                if (response.ok) {
+                    sessionStorage.clear();
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

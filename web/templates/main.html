@@ -1,164 +1,223 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividades</title>
-    <!-- Incluye Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="http://localhost:7777/images/logo-active.png" type="image/png">  
+    <link rel="icon" href="../images/logo-active.png" type="image/png">
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            background-color: #09243f;
 
+        }
+
+        .card {
+            margin: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card img {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .card-text {
+            color: #6c757d;
+        }
+
+        .add-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 30px;
+            border: none;
+        }
+
+        .welcome-text {
+            color: white;
+        }
+
+        .logout-button {
+            display: block;
+            margin: 40px auto 20px auto;
+            text-align: center;
+        }
+
+        .profile-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .profile-container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+        }
+
+        #fileInput {
+            display: none;
+        }
+    </style>
 </head>
-<style>
-  body {
-    background-color: #09243f;
-}
 
-.card {
-    margin: 15px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 100%; 
-    display: flex;
-    flex-direction: column;
-}
-
-.card img {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    height: 200px; 
-    width: 100%; 
-    object-fit: cover; 
-}
-
-.card-body {
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; 
-}
-
-.card-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    text-transform: capitalize;
-}
-
-.card-text {
-    color: #6c757d;
-}
-
-.welcome-text {
-    color: white;
-}
-
-/* Botón de home ya existente (esquina superior izquierda) */
-.home-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.home-button img {
-    width: 35px;
-    height: 35px;
-    filter: invert(1);
-}
-
-/* Estilos para la imagen de perfil en la esquina superior derecha */
-.profile-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-.profile-container img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ccc;
-}
-
-/* Ocultar el input file */
-#fileInput {
-    display: none;
-}
-
-</style>
 <body>
-    <a href="/" class="home-button">
-        <img src="http://localhost:7777/images/home.png" alt="Volver">
-    </a>
-    
-    <!-- Contenedor de la imagen de perfil en la esquina superior derecha -->
-    <div class="profile-container">
-       <img id="profileImage" src="http://localhost:7777/images/default.png" alt="Foto de perfil">
-        <!-- Input file oculto para seleccionar la imagen -->
-        <input type="file" id="fileInput" name="fichero" accept="image/*">
-    </div>
-
     <div class="container my-5">
-        <h1 class="text-center welcome-text">Bienvenido, {{ username }}</h1>
-        <h2 class="text-center welcome-text">Actividades disponibles</h2>
+        <h1 class="text-center welcome-text">¡Bienvenido, {{ username }}!</h1>
+        <h2 class="text-center welcome-text mb-4">Actividades disponibles</h2>
+
         <div class="row">
             {% for actividad in actividades %}
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="{{ actividad.imagen }}" class="card-img-top" alt="{{ actividad.nombre }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ actividad.nombre }}</h5>
-                            <p class="card-text">{{ actividad.descripcion }}</p>
-                            <a href="#" class="btn btn-primary">Contactar</a>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100" data-id="{{actividad.id}}" data-imagen="{{actividad.imagen}}">
+                    <img src="{{actividad.imagen}}" class="card-img-top" alt="{{actividad.nombre}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{actividad.nombre}}</h5>
+                        <p class="card-text">{{actividad.descripcion}}</p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-warning" data-id="{{actividad.id}}" onclick="mostrarModalEditar('{{ actividad.id }}', '{{ actividad.nombre }}', '{{ actividad.descripcion }}')">Editar</button>
+                            <form method="POST" action="/api/eliminar" id="formEliminar" style="display: inline;">
+                                <input type="hidden" id="id" name="id" value="{{ actividad.id }}">
+                                <button type="submit" class="btn btn-danger w-100">Eliminar</button>
+                            </form>
                         </div>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
-        <div class="text-center mt-5">
-            <a href="/api/logout" class="btn btn-danger">Cerrar sesión</a>
+
+        <div class="logout-button">
+            <form action="/api/logout" method="POST">
+                <button type="submit" class="btn btn-danger">Cerrar sesión</button>
+            </form>
+        </div>
+
+        <button class="add-button" onclick="mostrarModal()">+</button>
+    </div>
+
+    <div class="modal fade" id="modalActividad">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">Nueva Actividad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formActividad" enctype="multipart/form-data" method="POST"
+                        action="/api/insertar_actividad">
+                        <input type="hidden" id="actividadId">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre:</label>
+                            <input type="text" id="nombreActividad" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción:</label>
+                            <textarea id="descripcionActividad" name="descripcion" class="form-control"
+                                required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Imagen:</label>
+                            <input type="file" id="imagenActividad" name="imagen" class="form-control" accept="image/*">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+                </form>
+            </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="modalActividadEditar">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTituloEditar">Editar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formActividadEditar" enctype="multipart/form-data" method="POST"
+                        action="/api/editar">
+                        <input type="hidden" id="imagenActual" name="imagen_actual">
+                        <input type="hidden" id="actividadIdEditar" name="id">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre:</label>
+                            <input type="text" id="nombreActividadEditar" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción:</label>
+                            <textarea id="descripcionActividadEditar" name="descripcion" class="form-control"
+                                required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Imagen:</label>
+                            <input type="file" id="imagenActividadEditar" name="imagen" class="form-control" accept="image/*">
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let modal = new bootstrap.Modal(document.getElementById('modalActividad'));
+        function mostrarModal() {
+            document.getElementById('formActividad').reset();
+            document.getElementById('modalTitulo').textContent = 'Nueva Actividad';
+            modal.show();
+        }
 
-   <script>
-    // Al hacer click en la imagen de perfil, se activa el input file oculto.
-    document.getElementById("profileImage").addEventListener("click", function() {
-      document.getElementById("fileInput").click();
-    });
-
-    // Cuando se selecciona un archivo, se envía la imagen al endpoint /upload.
-    document.getElementById("fileInput").addEventListener("change", function(event) {
-      const fileInput = event.target;
-      if (fileInput.files && fileInput.files[0]) {
-        const formData = new FormData();
-        formData.append("fichero", fileInput.files[0]);
-        // No se envía nombre, para que el backend genere automáticamente el nombre.
-
-        fetch("/upload", {
-          method: "POST",
-          body: formData
-        })
-        .then(response => response.json())
-        .then(result => {
-          if (result.status === "OK") {
-            // Actualizamos la imagen de perfil con la nueva imagen subida.
-            document.getElementById("profileImage").src = result.image_url;
-          } else {
-            alert("Error al subir la imagen: " + result.mensaje);
-          }
-        })
-        .catch(error => {
-          console.error("Error:", error);
-          alert("Hubo un error al subir la imagen.");
-        });
-      }
-    });
-  </script>
+        let modal2 = new bootstrap.Modal(document.getElementById('modalActividadEditar'));
+        function mostrarModalEditar(id, nombre, descripcion) {
+            document.getElementById('actividadIdEditar').value = id;
+            document.getElementById('nombreActividadEditar').value = nombre;
+            document.getElementById('descripcionActividadEditar').value = descripcion;
+            document.getElementById('modalTituloEditar').textContent = 'Editar Actividad';
+            modal2.show();
+        }
+    </script>
 </body>
+
 </html>

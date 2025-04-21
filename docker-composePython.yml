@@ -1,31 +1,29 @@
-version: '3'
 services:
   mariadb:
     image: mariadb
-    container_name: mariadb
+    container_name: mariadbB4
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: example
       MARIADB_USER: agente
       MARIADB_USER_PASSWORD: 0traClave
       MARIADB_DATABASE: PEPS
+    command: --wait_timeout=28800 --interactive_timeout=28800 --max_allowed_packet=64M
     volumes:
-      - ./mariadb_data:/var/lib/mysql
-      - ./Juegos.sql://docker-entrypoint-initdb.d/Juegos.sql
+      - mariadb_dataB4:/var/lib/mysql:rw
+      - ./Juegos.sql:/docker-entrypoint-initdb.d/Juegos.sql
     user: mysql
   phpmyadmin:
     image: phpmyadmin
-    container_name: phpmyadmin
+    container_name: phpmyadminB4
     restart: always
     environment:
       - PMA_HOST=mariadb
     ports:
-      - 9093:80
-    depends_on:
-      - mariadb
+      - 7104:80
   python:
     build: .
-    container_name: python
+    container_name: pythonB4
     environment:
       DB_USERNAME: root
       DB_PASSWORD: example
@@ -34,14 +32,22 @@ services:
       DB_PORT: 3306
       PORT: 8080
       HOST: 0.0.0.0
+      SECRET_KEY: 'you-will-never-guess'
+      DEBUG: 'false'
       PYTHONBUFFERED: 1
-    depends_on:
-        - mariadb
+    volumes:
+      - shared-data:/app/apache/static/images
   apache:
     build: ./web/apache
+    container_name: apacheB4
     volumes: 
       - ./web/static:/var/www/html
+      - shared-data:/usr/local/apache2/htdocs/static/images
     ports:
-      - 7777:80
+      - 6104:80
     depends_on:
       - python
+
+volumes:
+  mariadb_dataB4:
+  shared-data:

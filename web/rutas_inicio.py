@@ -64,7 +64,7 @@ def registro():
                     if cursor.rowcount == 1:  
                         conexion.commit()
                         # Redirigir a la página de inicio de sesión después del registro exitoso
-                        return redirect("http://localhost:6104/templates/formulariologin.html")
+                        return redirect("../templates/formulariologin.html")
                     else:
                         ret = {"status": "ERROR"}
                         code = 500
@@ -86,7 +86,7 @@ def registro():
 @app.route("/menu", methods=['GET'])
 def menu():
     if 'usuario' not in session:
-        return redirect("http://localhost:6104/templates/formulariologin.html")
+        return redirect("../templates/formulariologin.html")
     else:
         username = session['usuario']
         return render_template("main.html", username=username, actividades=obtener_actividades())
@@ -95,7 +95,7 @@ def menu():
 @app.route('/eliminar', methods=['POST'])
 def eliminar():
     if 'usuario' not in session:
-        return redirect("http://localhost:6104/templates/formulariologin.html")
+        return redirect("../templates/formulariologin.html")
     else:
         content_type = request.headers.get('Content-Type')
         if content_type == 'application/x-www-form-urlencoded':
@@ -117,7 +117,7 @@ def eliminar():
 @app.route('/editar', methods=['POST'])
 def editar():
     if 'usuario' not in session:
-        return redirect("http://localhost:6104/templates/formulariologin.html")
+        return redirect("../templates/formulariologin.html")
     else:
         content_type = request.headers.get('Content-Type', '')
         if 'application/x-www-form-urlencoded' in content_type or 'multipart/form-data' in content_type:
@@ -140,7 +140,7 @@ def editar():
                         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                         imagen.save(filepath)
                         # Guardar en base de datos (solo la ruta)
-                        ruta_imagen = f"http://localhost:6104/images/{filename}"  # Ruta relativa
+                        ruta_imagen = f"../images/{filename}"  # Ruta relativa
 
                         conexion = obtener_conexion()
                         with conexion.cursor() as cursor:
@@ -197,7 +197,7 @@ def insertar_actividad():
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                     imagen.save(filepath)
                     # Guardar en base de datos (solo la ruta)
-                    ruta_imagen = f"http://localhost:6104/images/{filename}"  # Ruta relativa
+                    ruta_imagen = f"../images/{filename}"  # Ruta relativa
 
                     conexion = obtener_conexion()
                     with conexion.cursor() as cursor:
@@ -219,7 +219,7 @@ from flask import redirect, url_for, make_response
 def logout():
     session.clear()
     
-    response = make_response(redirect("http://localhost:6104/"))  
+    response = make_response(redirect("/"))  
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "-1"

@@ -39,7 +39,7 @@ def guardar_actividad():
         filename = secure_filename(imagen_file.filename)
         imagen_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         imagen_file.save(imagen_path)
-        imagen_url = f"http://localhost:6104/images/{filename}"
+        imagen_url = f"/images/{filename}"
     else:
         imagen_url = ""
     
@@ -62,7 +62,7 @@ def actualizar_actividad(id):
         filename = secure_filename(imagen_file.filename)
         imagen_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         imagen_file.save(imagen_path)
-        imagen_url = f"http://localhost:6104/images/{filename}"
+        imagen_url = f"/images/{filename}"
     else:
         imagen_url = request.form.get("imagen", "")
     

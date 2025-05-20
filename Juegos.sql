@@ -11,6 +11,6 @@ CREATE TABLE usuarios(
     fechaUltimoAcceso DATE
 );
 INSERT INTO usuarios (`usuario`, `clave`, `email`, `fechaUltimoAcceso`) VALUES ('root', '$2b$12$MXQZOX/Zr4tXg2w/jTTo8eGi0XVL.GAOz7PCaaXfuQsqb4oYHCvU6', 'root@root.com', '2022-03-01');
-INSERT INTO actividades (`id`, `nombre`, `descripcion`, `imagen`) VALUES ('1', 'Levantamiento de peso muerto', 'Ejercicio esencial para fuerza y estabilidad.', 'http://localhost:6104/images/peso_muerto.jpg');
-INSERT INTO actividades (`id`, `nombre`, `descripcion`, `imagen`) VALUES ('2', 'Remo para espalda', 'Fortalece la espalda y mejora la resistencia.', 'http://localhost:6104/images/remo_espalda.jpeg');
-INSERT INTO actividades (`id`, `nombre`, `descripcion`, `imagen`) VALUES ('3', 'Clase de CrossFit', 'Rutinas intensas para mejorar el acondicionamiento físico.', 'http://localhost:6104/images/crossfit.jpeg')
+INSERT INTO actividades (`id`, `nombre`, `descripcion`, `imagen`) VALUES ('1', 'Levantamiento de peso muerto', 'Ejercicio esencial para fuerza y estabilidad.', '../images/peso_muerto.jpg');
+INSERT INTO actividades (`id`, `nombre`, `descripcion`, `imagen`) VALUES ('2', 'Remo para espalda', 'Fortalece la espalda y mejora la resistencia.', '../images/remo_espalda.jpeg');
+INSERT INTO actividades (`id`, `nombre`, `descripcion`, `imagen`) VALUES ('3', 'Clase de CrossFit', 'Rutinas intensas para mejorar el acondicionamiento físico.', '../images/crossfit.jpeg')

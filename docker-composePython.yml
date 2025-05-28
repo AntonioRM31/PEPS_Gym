@@ -13,7 +13,7 @@ services:
     command: --wait_timeout=28800 --interactive_timeout=28800 --max_allowed_packet=64M
     volumes:
       - mariadb_dataB4:/var/lib/mysql:rw
-      - Juegos.sql:/docker-entrypoint-initdb.d/Juegos.sql
+      - ./Juegos.sql:/docker-entrypoint-initdb.d/Juegos.sql:ro
     user: mysql
   phpmyadmin:
     image: phpmyadmin

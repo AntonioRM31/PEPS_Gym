@@ -25,6 +25,7 @@ services:
   python:
     build: .
     container_name: pythonB4
+    restart: always
     environment:
       DB_USERNAME: root
       DB_PASSWORD: example

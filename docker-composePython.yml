@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mariadb:
-    image: .
+    build: .
     container_name: mariadbB4
     restart: always
     environment:
